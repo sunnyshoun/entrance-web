@@ -1,0 +1,43 @@
+{% extends 'base-stock.html' %}
+{%- set is_user = 1 -%}
+{%- set html_title = '交易紀錄' -%}
+{%- set en_title = 'Orders' -%}
+{%- set zh_title = '交易紀錄' -%}
+{%- set jumbotron_class = 'jumbotron-stock' -%}
+
+{% block content %}
+    <div id="sec00"></div>
+    <section class="section-topic">
+        <h2 class="text-primary">{{ zh_title }}
+            <small class="text-muted">{{ en_title }}</small>
+        </h2>
+        <hr>
+        <div class="row btn-block">
+            <div class="col-lg-2 mb-3">
+                <button type="button" id="btnRefresh" class="btn btn-lg btn-primary">重新整理
+                    <span class="spinner-border spinner-border-sm d-none"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <table id="tableOrders" class="table table-orders table-sm table-hover table-bordered">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>股票代碼<br>Symbol</th>
+                    <th>名稱<br>Name</th>
+                    <th>買進賣出<br>B&amp;S</th>
+                    <th>成交價(元)<br>Price</th>
+                    <th>張數<br>Lots</th>
+                    <th>收付金額<br>Amount</th>
+                    <th>時間<br>Time</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+            </tbody>
+        </table>
+    </section>
+{% endblock %}
+
+{%- block extra_js %}
+    <script src="{{ url_for('static', filename='js/stock-orders.js') }}?{{ nowid }}"></script>
+{% endblock -%}

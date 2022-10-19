@@ -1,0 +1,103 @@
+{% extends 'base-stock.html' %}
+{%- set html_title = '系統設定' -%}
+{%- set en_title = 'Settings' -%}
+{%- set zh_title = '系統設定' -%}
+{%- set jumbotron_class = 'jumbotron-stock' -%}
+
+{% block content %}
+    <div id="sec00"></div>
+    <section class="section-topic">
+        <h2 class="text-primary">股票設定
+            <small class="text-muted">Stock List</small>
+        </h2>
+        <hr>
+
+        <form id="form1">
+            <div class="row">
+                <div class="col-lg-2">
+                    <input type="text" class="form-control form-control-lg mb-2 mr-sm-2" id="txtStockID" placeholder="股票代碼" onfocus="select();">
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" class="form-control form-control-lg mb-2 mr-sm-2" id="txtStockEx" placeholder="參數連結" onfocus="select();">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <select class="form-control form-control-lg mb-2 mr-sm-2" id="selCurrency" name="selCurrency">
+                            <option value="" disabled select>計價幣別</option>
+                            <option value="TWD">台幣</option>
+                            <option value="USD">美金</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control form-control-lg mb-2 mr-sm-2" id="txtName" placeholder="簡稱" onfocus="select();">
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control form-control-lg mb-2 mr-sm-2" id="txtFullname" placeholder="全稱" onfocus="select();">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <button type="button" id="btnSave" class="btn btn-lg btn-success mt-3 mb-2 mr-2">儲存</button>
+                    <button type="reset" id="btnClear" class="btn btn-lg btn-secondary mt-3 mb-2 mr-2">清空</button>
+                    <button type="button" id="btnList" class="btn btn-lg btn-primary mt-3 mb-2 mr-2">股票列表
+                        <span class="spinner-border spinner-border-sm d-none"></span>
+                    </button>
+                    <a class="btn btn-lg btn-info mt-3 mb-2 mr-2" href="https://www.google.com./finance/" target="_blank" rel="noopener noreferrer">Google 財經</a>
+                </div>
+            </div>
+        </form>
+
+        <hr>
+        <table id="tableStocks" class="table table-sm table-hover table-bordered">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>代碼<br>Symbol</th>
+                    <th>參數連結<br>GET Parameter</th>
+                    <th>幣別<br>Currency</th>
+                    <th>簡稱<br>Name</th>
+                    <th>全稱<br>Full Name</th>
+                    <th>維護<br>Edit</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <div id="sec01" class="section-divider"></div>
+    <section class="section-topic">
+        <h2 class="text-primary">開戶金額
+            <small class="text-muted">Inital Balance</small>
+        </h2>
+        <hr>
+        <form id="form2">
+            <div class="row">
+                <div class="col-lg-2">
+                    <input type="text" class="form-control form-control-lg mb-2 mr-sm-2" id="txtInitBalance" placeholder="開戶金額"
+                            onfocus="select();" value="{{ init_balance }}">
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <select class="form-control form-control-lg" id="selAmount" name="selAmount">
+                            <option value="" disabled select>開戶金額</option>
+                            <option value="1000000">1百萬</option>
+                            <option value="2000000">2百萬</option>
+                            <option value="5000000">5百萬</option>
+                            <option value="10000000">1千萬</option>
+                            <option value="2000000">2千萬</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <button type="button" id="btnSetInitBalance" class="btn btn-lg btn-success mt-3 mb-2 mr-2">儲存</button>
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}
+
+{%- block extra_js %}
+    <script src="{{ url_for('static', filename='js/stock-settings.js') }}?{{ nowid }}"></script>
+{% endblock -%}

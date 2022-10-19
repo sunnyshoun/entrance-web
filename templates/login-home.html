@@ -1,0 +1,91 @@
+{% extends 'base-login.html' %}
+{%- set zh_title = '登入' -%}
+{%- set site_title = "Sunny's Project" -%}
+
+{% block content %}
+        <div class="container text-center">
+            <div class="row">
+                <div class="offset-md-1 col-md-10">
+                    <img class="logo rounded" src="{{ url_for('static', filename='img/logo.png') }}" alt="Pyone Code School">
+                    <div class="content">
+                        <h1><small class="texti-small pyone-center">{{ site_title }}</small></h1>
+                        <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8">
+                            <form role="form" action="" method="post">
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="radRole1">
+                                        <input class="form-check-input" type="radio" name="radRoles" id="radRole1" value="guest">訪客
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="radRole4">
+                                        <input class="form-check-input" type="radio" name="radRoles" id="radRole4" value="admin">管理員
+                                    </label>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <select class="form-control form-control-lg" id="selRole" name="selRole">
+                                      <option value="guest" selected>訪客 (guest)</option>
+                                      <option value="admin">管理員 (admin)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-lg invisible" id="txtPassphrase" placeholder="通行密碼" autofocus>
+                                    <input type="hidden" class="form-control form-control-lg" id="txtPassword" name="txtPassword" placeholder="">
+                                </div>
+                                <div class="form-group d-grid">
+                                    {%- if submit_result|length > 0 %}
+                                    <div class="alert mt-3 alert-danger" role="alert">
+                                      {{ submit_result }}
+                                    </div>
+                                    {%- endif %}
+                                    <br>
+                                    <button type="submit" class="btn mt-3 btn-lg btn-success" id="btnSubmit">登入</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block switch_link %}{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $('#txtPassphrase').val('guest');
+        $('#txtPassword').val(sha256($('#txtPassphrase').val()));
+        $('#radRole1').prop('checked', true);
+        $('input[type=radio][id^="radRole"]').change(function() {
+            $('#selRole').val(this.value);
+            $('#txtPassphrase').focus();
+            if($('#selRole').val() == 'guest'){
+                $('#txtPassphrase').addClass('invisible');
+                $('#txtPassphrase').val('guest');
+                $('#txtPassword').val(sha256($('#txtPassphrase').val()));
+            }
+            else{
+                $('#txtPassphrase').val('');
+                $('#txtPassword').val('');
+                $('#txtPassphrase').removeClass('invisible');
+            }
+        });
+        $('#selRole').change(function() {
+            $('input[type=radio][id^="radRole"]').each(function() {
+                $(this).prop('checked', false);
+                if(this.value == $('#selRole').val()) {
+                    $(this).prop('checked', true);
+                    $('#txtPassphrase').focus();
+                }
+            });
+        });
+        $('#txtPassphrase').on('input', function (e) {
+            $('#txtPassword').val(sha256($('#txtPassphrase').val()));
+        });
+        $('#newPassword').on('keypress', function (e) {
+            if(e.keyCode == '13') {
+                $('#btnsubmit').click();
+            }
+        });
+    </script>
+{% endblock %}

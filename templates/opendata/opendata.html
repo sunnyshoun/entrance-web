@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{%- set has_menu = 1 -%}
+{%- set is_sect = 1 -%}
+{%- set html_title = '開放資料平台' -%}
+{%- set en_title = 'Opendata' -%}
+{%- set zh_title = '開放資料平台' -%}
+{%- set jumbotron_class = 'jumbotron-light' -%}
+
+{%- block extra_css %}
+    <style type="tet/css">
+        .movie-clip h4{
+            margin-top: 60px;
+        }
+    </style>
+{%- endblock %}
+
+{%- block menu -%}
+                <li class="nav-item"><a class="nav-link" href="javascript:history.back()">Back</a></li>
+{%- endblock -%}
+
+{% block content %}
+    <div class="container">
+        <div class="col-lg-4">
+            <a href="/opendata/Light_Rail" class="btn btn-lg btn-block btn-primary">輕軌車站</a>
+        </div>
+        <div class="col-lg-4">
+            <a href="/opendata/vaccine" class="btn btn-lg btn-block btn-primary">公費疫苗</a>
+        </div>
+    </div>
+{% endblock %}

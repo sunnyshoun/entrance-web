@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{%- set is_home = 1 -%}
+{%- set is_chap = 1 -%}
+{%- set is_public = 1 -%}
+{%- set has_code = 0 -%}
+{%- set has_menu = 1 -%}
+{%- set html_title = "Sunny's Project" -%}
+{%- set en_title = "Sunny's Project" -%}
+{%- set zh_title = "Sunny's 專案" -%}
+
+{%- block menu %}
+                <li class="nav-item"><a class="nav-link" href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://replit.com" target="_blank" rel="noopener noreferrer">Replit</a></li>
+                <li class="nav-item"><a class="nav-link" href="https://stackoverflow.com/" target="_blank" rel="noopener noreferrer">Stack Overflow</a></li>
+{%- endblock %}
+
+{% block content %}
+        {%- if session['role_name'] in ('guest', 'admin') %}
+        <div class="row section-course btn-block">
+            <div class="col-lg-4">
+                <a class="btn btn-lg btn-secondary" target="_blank" href="https://github.com/sunnyshoun"><i class="fa-brands fa-github"></i></i> 我的GitHub</a>
+            </div>
+            <div class="col-lg-4">
+                <a class="btn btn-lg btn-secondary" target="_blank" href="https://www.linkedin.com/in/sunny-huang-656781250"><i class="fa-brands fa-linkedin"></i></i> 我的LinkedIn</a>
+            </div>
+            <div class="col-lg-4">
+                <a class="btn btn-lg btn-secondary" target="_blank" href="https://replit.com/@chej40505?tab=repls"><i class="fas fa-cubes"></i> 我的Replit</a>
+            </div>
+            <div class="col-lg-4">
+                <a href="/opendata" class="btn btn-lg btn-primary"><i class="fa-solid fa-folder-open"></i> 資料開放平台</a>
+            </div>
+            <div class="col-lg-4">
+                <a class="btn btn-lg btn-primary"  target="_blank" href="https://github.com/sunnyshoun/wynnBot"><i class="fab fa-discord"></i> Discord Bot</a>
+            </div>
+            <div class="col-lg-4">
+                <a class="btn btn-lg btn-primary"  target="_blank" href="https://github.com/sunnyshoun/obj_diff"><i class="fas fa-object-ungroup"></i> 物件偏移偵測</a>
+            </div>
+            <div class="col-lg-4">
+                <a href="/exercise" class="btn btn-lg btn-primary"><i class="fa-solid fa-folder-open"></i> 練習</a>
+            </div>
+        </div>
+        {%- endif %}
+        <hr>
+        <div class="timezone">
+            <p class="lead">Asia/Taipei <span class="text-danger">{{ dtnow }}</span></p>
+        </div>
+{% endblock %}
+
+{%- block extra_js %}
+    <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+{% endblock -%}

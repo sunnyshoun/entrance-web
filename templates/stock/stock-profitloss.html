@@ -1,0 +1,46 @@
+{% extends 'base-stock.html' %}
+{%- set is_user = 1 -%}
+{%- set html_title = '損益明細' -%}
+{%- set en_title = 'Profit & Loss' -%}
+{%- set zh_title = '損益明細' -%}
+{%- set jumbotron_class = 'jumbotron-stock' -%}
+
+{% block content %}
+    <div id="sec00"></div>
+    <section class="section-topic">
+        <h2 class="text-primary">{{ zh_title }}
+            <small class="text-muted">{{ en_title }}</small>
+        </h2>
+        <hr>
+        <div class="row btn-block">
+            <div class="col-lg-2 mb-3">
+                <button type="button" id="btnRefresh" class="btn btn-lg btn-primary">重新整理
+                    <span class="spinner-border spinner-border-sm d-none"></span>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <table id="tableProfitloss" class="table table-profitloss table-sm table-hover table-bordered">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>股票代碼<br>Symbol</th>
+                    <th>名稱<br>Name</th>
+                    <th>張數<br>Lots</th>
+                    <th>買進均價<br>Mean Cost</th>
+                    <th>賣出時價<br>Price</th>
+                    <th>買進成本<br>Cost</th>
+                    <th>賣出收入<br>Income</th>
+                    <th>損益<br>P&L</th>
+                    <th>報酬率<br>ROI</th>
+                    <th>時間<br>Time</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+            </tbody>
+        </table>
+    </section>
+{% endblock %}
+
+{%- block extra_js %}
+    <script src="{{ url_for('static', filename='js/stock-profitloss.js') }}?{{ nowid }}"></script>
+{% endblock -%}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Sunny">
+    <title>Sunny's project</title>
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/simple.css') }}?{{ nowid }}">
+</head>
+
+<body class="simple-page">
+    <div class="container">
+        <h1 class="simple-title">帳號啟用狀態</h1>
+        {% if is_activated == True %}
+        <h2 class="success-text">帳號已經啟用</h2>
+        {% else %}
+        <h2 class="error-text">帳號啟用失敗</h2>
+        {% endif %}
+        <hr>
+        <p><a href="/stock" class="home-link">掌聲股利</a></p>
+    </div>
+</body>
+</html>

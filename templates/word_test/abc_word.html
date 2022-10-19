@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{%- set is_sect = 1 -%}
+{%- set en_title = 'abc words' -%}
+{%- set zh_title = '單字測驗' -%}
+{%- set jumbotron_class = 'jumbotron-light' -%}
+
+{% block content %}
+    <div id="abc-sheet">
+        <form id="formSheet" action="">
+            <div class="sheet-header">
+                <h5 class="sheet-title mt-5" id="sheetLabel">試卷編號</h5>
+                </div>
+                <div class="sheet-body">
+                </div>
+                <div class="sheet-footer">
+                <input type="hidden" id="WordLevel" name="WordLevel">
+                <input type="hidden" id="TypeID" name="TypeID">
+                <input type="hidden" id="TestID" name="TestID">
+                <button type="button" id="btnSave" class="btn btn-lg btn-success">提交</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(function(){
+            setTest();
+            $('#btnSave').on('click', function() { scoreTest(); });
+        });
+
+        function scoreTest() {
+            var formData = $('#formSheet').serialize();
+            $.ajax({'type': 'POST', 'data': formData, 'url': '/gept_sheets_score',
+                beforeSend: function(){ $('#btnCurrent > span').removeClass('d-none'); },
+            })
+            .done(function(data, textStatus, jqXHR) {
+                if(data.result == true) {
+                    toastr.success('評分完畢，成績 '+data.score+' 分');
+                    //$('#abc-sheet .sheet-body').empty();
+                }
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) { alertError(jqXHR.status); })
+            .always(function(){ $('#btnCurrent > span').addClass('d-none'); });
+        }
+        
+        function setTest() {
+            var formData = {
+                'chkW1': 1,
+                'chkW2': 0,
+                'chkW3': 0,
+                'chkFB': 1,
+                'chkMC': 0,
+            };
+
+            $.ajax({'type': 'POST', 'data': formData, 'url': '/gept_tests_save',
+                beforeSend: function(){ ; },
+            })
+            .done(function(data, textStatus, jqXHR) {
+                toastr.success('請開始測驗');
+                readTest(data.test_id);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) { alertError(jqXHR.status); })
+            .always(function(){ ; });
+        };
+
+        function readTest(argTestID) {
+            var argWordLevel = 'w1';
+            var argTypeID = 'fill_in_the_blank';
+            var formData = {
+                'WordLevel': argWordLevel,
+                'TypeID': argTypeID,
+                'TestID': argTestID,
+            };
+
+            $.ajax({'type': 'POST', 'data': formData, 'url': '/gept_sheets_read',
+                beforeSend: function(){ $('#btnCurrent > span').removeClass('d-none'); },
+            })
+            .done(function(data, textStatus, jqXHR) {
+                $('#abc-sheet .sheet-body').empty();
+                $('#sheetLabel').html(geptLevels[argWordLevel]+' '+geptTestTypes[argTypeID]+' <span class="text-primary">試卷編號</span> <small>'+argTestID+'</small>');
+                $('#WordLevel').val(argWordLevel);
+                $('#TypeID').val(argTypeID);
+                $('#TestID').val(argTestID);
+
+                var items = [];
+                if(argTypeID=='fill_in_the_blank') {
+                    $.each(data.test_sheet, function(index, row) {
+                        items.push(`
+                        <div class="form-group row">
+                            <div class="col-lg-3">${(index+1)}. 
+                                <span class="text-danger" data-toggle="tooltip" data-placement="right" title="${row.ans}">${row.qtest}</span>
+                            </div>
+                            <div class="col-lg-5">${row.qhint}</div>
+                            <div class="col-lg-4">
+                                <input type="text" name="q${index}" class="text-primary form-control" maxlength="${row.qtest.replaceAll(' ', '').length}">
+                            </div>
+                        </div><hr>`);
+                    });
+                }
+                else if(argTypeID=='multiple_choice') {
+                    var letters = ['A', 'B', 'C', 'D', 'E'];
+                    $.each(data.test_sheet, function(index, row) {
+                        var options = row.qwords.split(',');
+                        items.push(`
+                        <div class="form-group row">
+                            <div class="col-lg-12">${(index+1)}. 
+                                <span class="text-danger">${row.qtest}</span>
+                            </div>
+                            <div class="col-lg-12">`);
+                        $.each(options, function(i, element) {
+                            items.push(`
+                            <div class="col-md-5 form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="q${index}${i}" name="q${index}" value="${(i+1)}">
+                                <label class="form-check-label" for="q${index}${i}" title="${element}">(${letters[i]}) ${element}</label>
+                            </div>`);
+                        });
+                        items.push(`
+                            </div>
+                        </div><hr>`);
+                    });
+                }
+
+                $('#abc-sheet .sheet-body').html(items.join(''));
+                $('[data-toggle="tooltip"]').tooltip();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) { alertError(jqXHR.status); })
+            .always(function(){ $('#btnCurrent > span').addClass('d-none'); });
+        }    
+    </script>
+{% endblock %}

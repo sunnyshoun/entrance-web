@@ -1,0 +1,117 @@
+{% extends 'base-login.html' %}
+{%- set zh_title = '掌聲股利' -%}
+{%- set en_title = '"Stock" in magic' -%}
+{%- set tabf1 = ('', 'Signin') -%}
+{%- set tabf2 = ('Signup',) -%}
+{%- set tabf3 = ('ResetPassword', 'ResendActivation') -%}
+
+{% block content %}
+        <div class="container text-center">
+            <div class="row">
+                <div class="offset-md-1 col-md-10">
+                    <img class="logo rounded" src={{ url_for('static', filename='img/stock.png')}} alt="">
+                    <div class="content">
+                        <h1><small class="texti-small pyone-center">{{ site_title }}</small></h1>
+                        <h2><small class="texti-small">{{zh_title}} <span class="command-post">{{en_title}}</span></small></h2>
+                        <form role="form" id="formMain" action="" method="post">
+                            <div class="offset-lg-3 col-lg-6 offset-md-2 col-md-8">
+                                <nav>
+                                    <div class="nav nav-pills" id="nav-tab" role="tablist">
+                                        <a id="signin-tab" data-bs-toggle="tab" href="#signin" role="tab" aria-controls="signin"
+                                        class="nav-link{% if act_code in tabf1%} active{% endif %}">登入</a>
+                                        <a id="signup-tab" data-bs-toggle="tab" href="#signup" role="tab" aria-controls="signup"
+                                        class="nav-link{% if act_code in tabf2%} active{% endif %}">註冊</a>
+                                        <a id="resend-tab" data-bs-toggle="tab" href="#resend" role="tab" aria-controls="resend"
+                                        class="nav-link{% if act_code in tabf3%} active{% endif %}">忘記</a>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div id="signin" role="tabpanel" aria-labelledby="signin-tab"
+                                     class="tab-pane fade{% if act_code in tabf1 %} show active{%endif%}">
+                                        <div class="form-group">
+                                            <hr>
+                                            <input type="text" class="form-control form-control-lg" 
+                                                id="txtAccount" name="txtAccount" placeholder="Email 帳號" autofocus>
+                                            <br>
+                                            <input type="password" class="form-control form-control-lg" 
+                                                id="txtPassword" name="txtPassword" placeholder="密碼">
+                                        </div>
+                                        <div class="form-group d-grid">
+                                            {%- if submit_result|length > 0 and act_code in tabf1 %}
+                                            <div class="alert mt-3 alert-danger alert-dismissible">
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                {{ submit_result }}
+                                            </div>
+                                            {%- endif %}
+                                            <button type="button" class="btn mt-3 btn-lg btn-primary" id="btnSignin">登入</button>
+                                        </div>
+                                    </div>
+                                    <div id="signup" role="tabpanel" aria-labelledby="signup-tab"
+                                     class="tab-pane fade{% if act_code in tabf2 %} show active{%endif%}">
+                                        <div class="form-group">
+                                            <hr>
+                                            <input type="text" class="form-control form-control-lg" 
+                                                id="newAccount" name="newAccount" placeholder="新建 Email 帳號">
+                                            <br>
+                                            <input type="password" class="form-control form-control-lg" 
+                                                id="newPassword" name="newPassword" placeholder="設定密碼">
+                                        </div>
+                                        <div class="form-group d-grid">
+                                            {%- if submit_result|length > 0 and act_code in tabf2 %}
+                                            <div class="alert mt-3 alert-danger alert-dismissible">
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                {{ submit_result }}
+                                            </div>
+                                            {%- endif %}
+                                            <button type="button" class="btn mt-3 btn-lg btn-dark" id="btnSignup">註冊</button>
+                                        </div>
+                                    </div>
+                                    <div id="resend" role="tabpanel" aria-labelledby="resend-tab"
+                                     class="tab-pane fade{% if act_code in tabf3 %} show active{%endif%}">
+                                        <div class="form-group">
+                                            <hr>
+                                            <input type="text" class="form-control form-control-lg" 
+                                                id="theAccount" name="theAccount" placeholder="Email 帳號">
+                                        </div>
+                                        <div class="form-group d-grid">
+                                            {%- if submit_result|length > 0 and act_code in tabf3 %}
+                                            <div class="alert mt-3 alert-danger alert-dismissible">
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                {{ submit_result }}
+                                            </div>
+                                            {%- endif %}
+                                            <button type="button" class="btn mt-3 btn-lg btn-danger" id="btnResetPassword">重設密碼</button>
+                                            <br>
+                                            <button type="button" class="btn mt-3 btn-lg btn-warning" id="btnResendActivation">重送驗證</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><input type="hidden" id="actCode" name="actCode"></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        $('[id^="btn"]').on('click', function (e) {
+            $('#actCode').val(this.id.slice(3));
+            $('#formMain').submit();
+        });
+
+        $('#txtPassword').on('keypress', function (e) {
+            if(e.keyCode == '13') {
+                $('#btnSignin').click();
+            }
+        });
+
+        $('#newPassword').on('keypress', function (e) {
+            if(e.keyCode == '13') {
+                $('#btnSignup').click();
+            }
+        });
+    </script>
+{% endblock %}
