@@ -5,6 +5,10 @@
 {%- set zh_title = '委託下單' -%}
 {%- set jumbotron_class = 'jumbotron-stock' -%}
 
+{%- block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap5/bootstrap-select.min.css') }}?{{nowid}}">
+{%- endblock %}
+
 {% block content %}
     <div id="sec00"></div>
     <section class="section-topic">
@@ -22,12 +26,13 @@
         <div class="row btn-block">
             <div class="col-lg-2 mb-3">
                 <div class="form-group">
-                    <select class="form-control form-control-lg" id="selStock" name="selStock">
+                    <select class="form-control-lg selectpicker" id="selStock" name="selStock" data-live-search="true">
                         <option value="" disabled selected>股票代碼</option>
                         {%- for stock_id, stock_info in list_stocks.items() %}
                         <option value="{{ stock_id }}">{{ stock_id }} {{ stock_info['name'] }}</option>
                         {%- endfor %}
                     </select>
+                      
                 </div>
             </div>
             <div class="col-lg-2 mb-3">
@@ -115,4 +120,6 @@
 
 {%- block extra_js %}
     <script src="{{ url_for('static', filename='js/stock-entrust.js') }}?{{ nowid }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap5/bootstrap-select.min.js') }}?{{ nowid }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap5/defaults-zh_TW.min.js') }}?{{ nowid }}"></script>
 {% endblock -%}
